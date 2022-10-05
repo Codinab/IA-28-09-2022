@@ -5,8 +5,20 @@ class Node:
         self.action = _action
         self.cost = _cost
 
+    def total_state(self):
+        if self.parent is None:
+            return [self.state]
+        return self.parent.total_path() + [self.state]
+
+    def total_cost(self):
+        if self.parent is None:
+            return self.cost
+        return self.cost + self.parent.total_cost()
+
     def total_path(self):
-        raise NotImplementedError
+        if self.action == None:
+            return []
+        return self.parent.total_path() + [self.action]
 
     def __str__(self):
         # TODO implement, default behaviour:
@@ -38,6 +50,8 @@ def test_robot():
 
     print(root)
     print(step1)
+    print(step3_1.total_path())
+    print(step3_2.total_path())
     print(step3_1.total_path())
     print(step3_2.total_path())
 

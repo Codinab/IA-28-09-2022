@@ -16,7 +16,7 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
-
+import node
 import util
 
 
@@ -95,7 +95,28 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    # python3 pacman.py -l maze .p SearchAgent -a fn=bfs
+    # començar per tiny maze
+    n = node.Node(problem.getStartState())
+
+    if problem.isGoalState(n.state):
+        return n.total_path()
+
+    fridge = util.Queue()
+    fridge.push(n)
+    explored = set()
+
+    while not fridge.isEmpty():
+        n = fridge.pop()
+        explored.add(n)
+        for state, action, cost in problem.getSuccessors(n.state):
+            if state not in [x.state for x in explored] and state not in [x.state for x in fridge.list]:
+                child = node.Node(state, n, action, cost)
+                if problem.isGoalState(child.state):
+                    return child.total_path()
+                fridge.push(child)
+    return []  # no solution found
 
 
 def uniformCostSearch(problem):
